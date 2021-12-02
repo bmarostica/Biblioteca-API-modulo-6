@@ -1,5 +1,6 @@
 package com.dbc.biblioteca.service;
 
+import com.dbc.biblioteca.dto.EmailDTO;
 import com.dbc.biblioteca.entity.ContaClienteEntity;
 import com.dbc.biblioteca.entity.TipoCliente;
 import freemarker.template.Configuration;
@@ -26,6 +27,7 @@ public class EmailService {
     private String remetente;
     private final Configuration configuration;
 
+    //TODO Apagar após terminar os consumers.
     public void enviarEmailComTemplate(ContaClienteEntity cliente) throws MessagingException, IOException, TemplateException {
         MimeMessage mimeMessage = emailSender.createMimeMessage();
 
@@ -55,6 +57,23 @@ public class EmailService {
         helper.setText(html, true);
 
         emailSender.send(mimeMessage);
+    }
 
+    public EmailDTO enviarEmailKafkaPontosFidelidade(ContaClienteEntity cliente) {
+        EmailDTO emailDTO = new EmailDTO();
+        String mensagem = "";
+        if (cliente.getTipoCliente() == TipoCliente.COMUM) {
+            mensagem = "Parabéns, "+cliente.getNome()+"!<br><br>"+
+                    "Você já possui pontos fidelidade suficiente para trocar por duas semanas Premium.<br />" +
+                    "Pontos Fidelidade adquiridos: " + cliente.getPontosFidelidade();
+        } else if (cliente.getTipoCliente() == TipoCliente.PREMIUM) {
+            mensagem = "Parabéns, " +cliente.getNome()+ "!<br><br>" +
+                    "Você já possui pontos fidelidade suficiente para trocar por um mês de assinatura grátis.<br />" +
+                    "Pontos Fidelidade adquiridos: " + cliente.getPontosFidelidade();
+        }
+        emailDTO.setDestinatario(cliente.getEmail());
+        emailDTO.setAssunto("Parabéns! 1000 pontos!");
+        emailDTO.setTexto(mensagem);
+        return emailDTO;
     }
 }

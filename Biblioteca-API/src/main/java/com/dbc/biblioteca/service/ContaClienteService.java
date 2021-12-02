@@ -6,12 +6,16 @@ import com.dbc.biblioteca.entity.ContaClienteEntity;
 import com.dbc.biblioteca.entity.PlanosDeAssinatura;
 import com.dbc.biblioteca.entity.StatusCliente;
 import com.dbc.biblioteca.exceptions.RegraDeNegocioException;
+import com.dbc.biblioteca.kafka.Producer;
 import com.dbc.biblioteca.repository.ContaClienteRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,6 +24,8 @@ import java.util.stream.Collectors;
 public class ContaClienteService implements PlanosDeAssinatura {
     private final ContaClienteRepository contaClienteRepository;
     private final ObjectMapper objectMapper;
+    private final Producer producer;
+    private final EmailService emailService;
 
     public ContaClienteEntity findById(Integer id) throws RegraDeNegocioException {
         ContaClienteEntity entity = contaClienteRepository.findById(id)
@@ -71,6 +77,20 @@ public class ContaClienteService implements PlanosDeAssinatura {
             cliente.setPontosFidelidade((int) (cliente.getPontosFidelidade() - valor));
         }
     }
+
+    @Scheduled(cron = "* * 20 * * MON-FRI")
+    public void produzirEmailKafka() {
+        List<ContaClienteEntity> lista = contaClienteRepository.findPontosFidelidade();
+        lista.forEach(contaClienteEntity -> {
+            try {
+                producer.sendEmailKafka(emailService.enviarEmailKafkaPontosFidelidade(contaClienteEntity));
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+
 
 }
 

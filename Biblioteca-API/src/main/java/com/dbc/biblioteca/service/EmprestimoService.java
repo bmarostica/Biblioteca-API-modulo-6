@@ -86,9 +86,9 @@ public class EmprestimoService {
         entity.setStatus(true);
         EmprestimoEntity emprestimoCriado = emprestimoRepository.save(entity);
 
-        if (entity.getContaClienteEntity().getPontosFidelidade() == 1000) {
-            emailService.enviarEmailComTemplate(entity.getContaClienteEntity());
-        }
+//        if (entity.getContaClienteEntity().getPontosFidelidade() == 1000) {
+//            emailService.enviarEmailComTemplate(entity.getContaClienteEntity());
+//        }
 
         EmprestimoDTO dto = objectMapper.convertValue(emprestimoCriado, EmprestimoDTO.class);
         dto.setLivroDTO(livroService.getById(entity.getLivroEntity().getIdLivro()));

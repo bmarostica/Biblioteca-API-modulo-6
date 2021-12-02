@@ -8,7 +8,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Repository
 public interface ContaClienteRepository extends JpaRepository<ContaClienteEntity, Integer> {
+
+    @Query(value = "select * from cliente where pontos_fidelidade >= 1000", nativeQuery = true)
+    public List<ContaClienteEntity> findPontosFidelidade();
 
 }
