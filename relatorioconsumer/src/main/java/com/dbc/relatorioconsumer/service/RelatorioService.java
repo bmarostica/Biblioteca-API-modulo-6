@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.bson.Document;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,5 +28,9 @@ public class RelatorioService {
         return relatorioRepository.findAll().stream()
                 .map(relatorio -> objectMapper.convertValue(relatorio, Document.class))
                 .collect(Collectors.toList());
+    }
+
+    public  List<Document> listRelatorioPorData(LocalDate from, LocalDate to) {
+        return relatorioRepository.listarRelatorioPorData(from,to);
     }
 }
