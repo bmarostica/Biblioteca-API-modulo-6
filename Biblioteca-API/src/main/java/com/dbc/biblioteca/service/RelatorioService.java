@@ -1,7 +1,6 @@
 package com.dbc.biblioteca.service;
 
-import com.dbc.biblioteca.dto.EmprestimoDTO;
-import com.dbc.biblioteca.dto.RelatorioDTO;
+import com.dbc.biblioteca.dto.*;
 import com.dbc.biblioteca.exceptions.RegraDeNegocioException;
 import com.dbc.biblioteca.kafka.Producer;
 import com.dbc.biblioteca.repository.EmprestimoRepository;
@@ -38,17 +37,13 @@ public class RelatorioService {
     public RelatorioDTO criarRelatorioEmprestimo() {
         List<Document> lista = emprestimoRepository.findByDate(LocalDate.now()).stream()
                 .map(emprestimo1 -> {
-                    EmprestimoDTO dto = objectMapper.convertValue(emprestimo1, EmprestimoDTO.class);
-                    try {
-                        dto.setContaClienteDTO(contaClienteService.getById(emprestimo1.getContaClienteEntity().getIdCliente()));
-                        dto.setFuncionarioDTO(funcionarioService.getById(emprestimo1.getFuncionarioEntity().getIdFuncionario()));
-                        dto.setLivroDTO(livroService.getById(emprestimo1.getLivroEntity().getIdLivro()));
-                    } catch (RegraDeNegocioException e) {
-                        e.printStackTrace();
-                    }
-                    Document document = objectMapper.convertValue(dto, Document.class);
-                    return document;
+                    Document doc = objectMapper.convertValue(emprestimo1, Document.class);
 
+                    doc.append("Cliente", objectMapper.convertValue(emprestimo1.getContaClienteEntity(), ContaClienteDTO.class));
+                    doc.append("Funcionario", objectMapper.convertValue(emprestimo1.getFuncionarioEntity(), FuncionarioDTO.class));
+                    doc.append("Livro", objectMapper.convertValue(emprestimo1.getLivroEntity(), LivroDTO.class));
+
+                    return doc;
                 })
                 .collect(Collectors.toList());
 

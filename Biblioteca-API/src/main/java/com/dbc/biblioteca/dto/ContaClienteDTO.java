@@ -17,11 +17,6 @@ import javax.validation.constraints.NotNull;
 public class ContaClienteDTO extends ContaClienteCreateDTO{
     private Integer idCliente;
 
-    private String nome;
-    private String telefone;
-    private String email;
-    private TipoCliente tipoCliente;
-
     @ApiModelProperty(value = "Status do Cliente -> ATIVO, CANCELADO e BLOQUEADO")
     private StatusCliente status;
 

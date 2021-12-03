@@ -16,11 +16,4 @@ import javax.validation.constraints.NotNull;
 public class LivroDTO extends LivroCreateDTO {
     private Integer idLivro;
 
-    private String titulo;
-    private String autor;
-    private String editora;
-    private Integer numeroDePaginas;
-    private Formato formato;
-    private Idioma idioma;
-    private StatusLivro statusLivro;
 }

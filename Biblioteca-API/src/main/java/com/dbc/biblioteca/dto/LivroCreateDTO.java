@@ -3,6 +3,8 @@ package com.dbc.biblioteca.dto;
 import com.dbc.biblioteca.entity.Formato;
 import com.dbc.biblioteca.entity.Idioma;
 import com.dbc.biblioteca.entity.StatusLivro;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
