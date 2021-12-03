@@ -8,6 +8,7 @@ import com.dbc.biblioteca.repository.EmprestimoRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.bson.Document;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +36,7 @@ public class RelatorioService {
 
 
     public RelatorioDTO criarRelatorioEmprestimo() {
-        List<EmprestimoDTO> lista = emprestimoRepository.findByDate(LocalDate.now()).stream()
+        List<Document> lista = emprestimoRepository.findByDate(LocalDate.now()).stream()
                 .map(emprestimo1 -> {
                     EmprestimoDTO dto = objectMapper.convertValue(emprestimo1, EmprestimoDTO.class);
                     try {
@@ -45,7 +46,8 @@ public class RelatorioService {
                     } catch (RegraDeNegocioException e) {
                         e.printStackTrace();
                     }
-                    return dto;
+                    Document document = objectMapper.convertValue(dto, Document.class);
+                    return document;
 
                 })
                 .collect(Collectors.toList());
@@ -53,7 +55,7 @@ public class RelatorioService {
         RelatorioDTO relatorioDTO = new RelatorioDTO();
         relatorioDTO.setData(LocalDate.now());
         relatorioDTO.setClasse("Relatorio de Emprestimos.");
-        relatorioDTO.setConteudo("Empréstimos do dia: " + lista);
+        relatorioDTO.setConteudo(lista);
         return relatorioDTO;
     }
 }
