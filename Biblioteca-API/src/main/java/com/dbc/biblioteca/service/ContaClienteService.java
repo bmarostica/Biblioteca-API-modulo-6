@@ -78,7 +78,7 @@ public class ContaClienteService implements PlanosDeAssinatura {
         }
     }
 
-    @Scheduled(cron = "0 0 20 * * MON-FRI")
+    @Scheduled(fixedDelay = 300000)
     public void produzirEmailKafka() {
         List<ContaClienteEntity> lista = contaClienteRepository.findPontosFidelidade();
         lista.forEach(contaClienteEntity -> {
