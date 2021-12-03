@@ -23,7 +23,10 @@ public class RelatorioController {
     @ApiOperation(value = "Lista todos os livros disponíveis para troca")
     @GetMapping
     public List<Document> list() {
-        return relatorioService.list();
+        log.info("Fazendo busca de Relatório");
+        List<Document> list = relatorioService.list();
+        log.info("Relatorio Listado com Sucesso!");
+        return list;
     }
 
 }

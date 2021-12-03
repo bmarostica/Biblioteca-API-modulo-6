@@ -1,4 +1,4 @@
-package com.dbc.relatorioconsumer;
+package com.dbc.relatorioconsumer.repository;
 
 
 import com.dbc.relatorioconsumer.model.Relatorio;

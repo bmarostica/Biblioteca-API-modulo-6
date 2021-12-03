@@ -1,7 +1,6 @@
 package com.dbc.relatorioconsumer.service;
 
-import com.dbc.relatorioconsumer.RelatorioRepository;
-import com.dbc.relatorioconsumer.dto.RelatorioDTO;
+import com.dbc.relatorioconsumer.repository.RelatorioRepository;
 import com.dbc.relatorioconsumer.model.Relatorio;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +16,7 @@ public class RelatorioService {
     private final RelatorioRepository relatorioRepository;
     private final ObjectMapper objectMapper;
 
-    public Document create(RelatorioDTO relatorioDTO) {
-        Relatorio relatorio = objectMapper.convertValue(relatorioDTO, Relatorio.class);
+    public Document create(Relatorio relatorio) {
         Relatorio relatorioCriado = relatorioRepository.save(relatorio);
         Document relatorioDocument = objectMapper.convertValue(relatorioCriado, Document.class);
         return relatorioDocument;

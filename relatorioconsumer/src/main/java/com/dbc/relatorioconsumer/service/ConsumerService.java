@@ -1,6 +1,7 @@
 package com.dbc.relatorioconsumer.service;
 
 import com.dbc.relatorioconsumer.dto.RelatorioDTO;
+import com.dbc.relatorioconsumer.model.Relatorio;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @RequiredArgsConstructor
 public class ConsumerService {
-
+    private final RelatorioService relatorioService;
     private final ObjectMapper objectMapper;
 
 
@@ -28,7 +29,12 @@ public class ConsumerService {
                         @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key,
                         @Header(KafkaHeaders.OFFSET) Long offset) throws JsonProcessingException {
         RelatorioDTO relatorioDTO = objectMapper.readValue(mensagem, RelatorioDTO.class);
-        System.out.println(relatorioDTO);
+
+        Relatorio relatorio = new Relatorio();
+        relatorio.setClasse(relatorioDTO.getClasse());
+        relatorio.setData(relatorioDTO.getData());
+        relatorio.setConteudo(relatorioDTO.getConteudo());
+        relatorioService.create(relatorio);
 
         log.info("MENSAGEM LIDA: '{}', CHAVE: '{}', OFFSET: '{}'", relatorioDTO, key, offset);
 
