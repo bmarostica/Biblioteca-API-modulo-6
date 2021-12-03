@@ -26,7 +26,7 @@ public class RelatorioService {
     private final LivroService livroService;
 
 
-    @Scheduled(fixedDelay = 10000)
+    @Scheduled(fixedDelay = 300000)
     public void gerarRelatorioEmprestimoKafka() throws JsonProcessingException {
 
         producer.sendRelatorioKafka(criarRelatorioEmprestimo());
