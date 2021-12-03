@@ -30,7 +30,11 @@ public class RelatorioService {
                 .collect(Collectors.toList());
     }
 
-    public  List<Document> listRelatorioPorData(LocalDate from, LocalDate to) {
+    public  List<Document> listRelatorioPor2Data(LocalDate from, LocalDate to) {
         return relatorioRepository.listarRelatorioPorData(from,to);
+    }
+
+    public  List<Document> listRelatorioPorData(LocalDate data) {
+        return relatorioRepository.listarRelatorioPorDataEspecifica(data);
     }
 }

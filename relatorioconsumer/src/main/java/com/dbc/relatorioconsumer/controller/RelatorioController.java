@@ -38,17 +38,17 @@ public class RelatorioController {
     public List<Document> listPorData(@RequestParam("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
                                       @RequestParam("to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to) {
         log.info("Fazendo busca de Relatório");
-        List<Document> list = relatorioService.listRelatorioPorData(from,to);
+        List<Document> list = relatorioService.listRelatorioPor2Data(from,to);
         log.info("Relatorio Listado com Sucesso!");
         return list;
     }
 
-//    @GetMapping("/find-by-data-de-nascimento")
-//    public List<PessoaEntity> findByDataNascimentoBetween(@RequestParam("inicio") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate inicio,
-//                                                          @RequestParam("fim") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fim){
-//        return pessoaRepository.findByDataNascimentoBetween(inicio, fim);
-//    }
-
-
-
+    @ApiOperation(value = "Lista todos os relatorios por data")
+    @GetMapping("/filtra-por-uma-data")
+    public List<Document> listPorDataEspecifica(@RequestParam("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) {
+        log.info("Fazendo busca de Relatório");
+        List<Document> list = relatorioService.listRelatorioPorData(data);
+        log.info("Relatorio Listado com Sucesso!");
+        return list;
+    }
 }

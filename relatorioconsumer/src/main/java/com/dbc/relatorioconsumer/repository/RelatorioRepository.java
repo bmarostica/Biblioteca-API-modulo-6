@@ -14,6 +14,9 @@ import java.util.List;
 @Repository
 public interface RelatorioRepository extends MongoRepository<Relatorio, String> {
 
-    @Query("{'date' : { $gte: ?0, $lte: ?1 } }")
+    @Query("{'data' : { $gte: ?0, $lte: ?1 } }")
     public List<Document> listarRelatorioPorData(LocalDate from, LocalDate to);
+
+    @Query("{'data': ?0}")
+    public List<Document> listarRelatorioPorDataEspecifica(LocalDate data);
 }
