@@ -17,6 +17,6 @@ public interface EmprestimoRepository extends JpaRepository<EmprestimoEntity,Int
     List<EmprestimoEntity> findByStatusTrue();
     List<EmprestimoEntity> findByStatusFalse();
 
-    @Query(value = "select * from emprestimo where data_emprestimo = :data")
-    List<EmprestimoEntity> findByDate(LocalDate date);
+    @Query(value = "select * from emprestimo where data_emprestimo = :data", nativeQuery = true)
+    List<EmprestimoEntity> findByDate(LocalDate data);
 }

@@ -12,4 +12,7 @@ public class FuncionarioDTO extends FuncionarioCreateDTO {
     @NotNull
     @ApiModelProperty(value = "Id do funcionário.")
     private Integer idFuncionario;
+    private String nome;
+    private String telefone;
+    private String email;
 }
