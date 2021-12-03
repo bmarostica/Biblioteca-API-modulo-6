@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Set;
 
 @Getter
@@ -27,4 +28,6 @@ public class FuncionarioEntity {
     @JsonIgnore
     @OneToMany(mappedBy = "funcionarioEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<EmprestimoEntity> emprestimosFuncionario;
+
+
 }

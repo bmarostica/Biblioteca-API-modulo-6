@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -31,6 +32,9 @@ public class EmprestimoEntity {
 
     @Column(name = "status")
     private Boolean status;
+
+    @Column(name = "data_emprestimo")
+    private LocalDate dataEmprestimo;
 
 
 }

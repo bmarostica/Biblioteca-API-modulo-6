@@ -29,7 +29,7 @@ public class Producer {
     @Value(value = "${kafka.topic.email}")
     private String topicoEmail;
 
-    @Value(value = "${kafka.topic.relatorios}")
+    @Value(value = "${kafka.topic.relatorio}")
     private String topicoRelatorio;
 
     private void send(String mensagem, String topico) {

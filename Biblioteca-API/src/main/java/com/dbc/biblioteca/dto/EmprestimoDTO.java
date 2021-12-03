@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -14,5 +15,6 @@ public class EmprestimoDTO {
     private LivroDTO livroDTO;
     private FuncionarioDTO funcionarioDTO;
     private ContaClienteDTO contaClienteDTO;
+    private LocalDate dataEmprestimo;
 
 }

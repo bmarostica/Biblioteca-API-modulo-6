@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -83,6 +85,7 @@ public class EmprestimoService {
         entity.setLivroEntity(livroRepository.getById(emprestimoCreateDTO.getIdLivroEmprestimo()));
         entity.setFuncionarioEntity(funcionarioRepository.getById(emprestimoCreateDTO.getIdFuncionarioEmprestimo()));
         entity.setContaClienteEntity(contaClienteRepository.getById(emprestimoCreateDTO.getIdClienteEmprestimo()));
+        entity.setDataEmprestimo(LocalDate.now());
         entity.setStatus(true);
         EmprestimoEntity emprestimoCriado = emprestimoRepository.save(entity);
 
@@ -128,6 +131,7 @@ public class EmprestimoService {
             emprestimoExistente.getLivroEntity().setStatusLivro(StatusLivro.DISPONIVEL);
             emprestimoNovo.getLivroEntity().setStatusLivro(StatusLivro.INDISPONIVEL);
         }
+        emprestimoNovo.setDataEmprestimo(LocalDate.now());
         emprestimoNovo.setStatus(true);
         EmprestimoEntity atualizado = emprestimoRepository.save(emprestimoNovo);
         EmprestimoDTO dto = objectMapper.convertValue(atualizado, EmprestimoDTO.class);
