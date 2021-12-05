@@ -21,7 +21,13 @@ public interface ContaClienteRepository extends JpaRepository<ContaClienteEntity
     @Query(value = "select * " +
             "from cliente " +
             "where data_registro = :data"
-            ,nativeQuery = true)
+            , nativeQuery = true)
     List<Document> findByData(LocalDate data);
+
+    @Query(value = "select * " +
+            "from cliente" +
+            "where tipo_cliente = '0'"
+            , nativeQuery = true)
+    List<Document> findByStatus();
 
 }
