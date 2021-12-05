@@ -15,6 +15,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -49,6 +50,7 @@ public class ContaClienteService implements PlanosDeAssinatura {
         ContaClienteEntity contaClienteEntity = objectMapper.convertValue(contaClienteCreateDTO, ContaClienteEntity.class);
         contaClienteEntity.setPontosFidelidade(0);
         contaClienteEntity.setStatus(StatusCliente.ATIVO);
+        contaClienteEntity.setData_registro(LocalDate.now());
         ContaClienteEntity contaCriada = contaClienteRepository.save(contaClienteEntity);
         ContaClienteDTO contaClienteDTO = objectMapper.convertValue(contaCriada, ContaClienteDTO.class);
         return contaClienteDTO;
