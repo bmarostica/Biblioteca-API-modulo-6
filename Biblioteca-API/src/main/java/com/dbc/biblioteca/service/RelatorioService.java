@@ -1,9 +1,10 @@
 package com.dbc.biblioteca.service;
 
 import com.dbc.biblioteca.dto.*;
-import com.dbc.biblioteca.exceptions.RegraDeNegocioException;
 import com.dbc.biblioteca.kafka.Producer;
+import com.dbc.biblioteca.repository.ContaClienteRepository;
 import com.dbc.biblioteca.repository.EmprestimoRepository;
+import com.dbc.biblioteca.repository.LivroRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.bson.Document;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import javax.print.Doc;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,18 +21,27 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RelatorioService {
     private final EmprestimoRepository emprestimoRepository;
+    private final ContaClienteRepository contaClienteRepository;
+    private final LivroRepository livroRepository;
     private final Producer producer;
     private final ObjectMapper objectMapper;
-    private final ContaClienteService contaClienteService;
-    private final FuncionarioService funcionarioService;
-    private final LivroService livroService;
 
 
-    @Scheduled(fixedDelay = 300000)
+//    @Scheduled(fixedDelay = 300000)
     public void gerarRelatorioEmprestimoKafka() throws JsonProcessingException {
 
-        producer.sendRelatorioKafka(criarRelatorioEmprestimo());
+        producer.sendRelatorioEmprestimoKafka(criarRelatorioEmprestimo());
 
+    }
+
+//    @Scheduled(fixedDelay = 300000)
+    public void gerarRelatorioLivroKafka() throws JsonProcessingException {
+        producer.sendRelatorioLivroKafka(criarRelatorioLivro());
+    }
+
+    @Scheduled(fixedDelay = 300000)
+    public void gerarRelatorioClienteKafka() throws JsonProcessingException {
+        producer.sendRelatorioClienteKafka(criarRelatorioCliente());
     }
 
 
@@ -54,4 +65,21 @@ public class RelatorioService {
         return relatorioDTO;
     }
 
+    public RelatorioDTO criarRelatorioCliente() {
+        List<Document> lista = contaClienteRepository.findByDate(LocalDate.now());
+        RelatorioDTO relatorioDTO = new RelatorioDTO();
+        relatorioDTO.setClasse("Relatório de Clientes.");
+        relatorioDTO.setData(LocalDate.now());
+        relatorioDTO.setConteudo(lista);
+        return relatorioDTO;
+    }
+
+    public RelatorioDTO criarRelatorioLivro() {
+        List<Document> lista = livroRepository.findByDate(LocalDate.now());
+        RelatorioDTO relatorioDTO = new RelatorioDTO();
+        relatorioDTO.setClasse("Relatório de Livros.");
+        relatorioDTO.setData(LocalDate.now());
+        relatorioDTO.setConteudo(lista);
+        return relatorioDTO;
+    }
 }

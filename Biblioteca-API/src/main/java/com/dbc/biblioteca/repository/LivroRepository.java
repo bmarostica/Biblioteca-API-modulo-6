@@ -24,6 +24,6 @@ public interface LivroRepository extends JpaRepository<LivroEntity, Integer> {
             "from livro " +
             "where data_registro = :data"
             ,nativeQuery = true)
-    List<Document> findByData(LocalDate data);
+    List<Document> findByDate(LocalDate data);
 
 }

@@ -23,42 +23,6 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor
 public class EmailService {
-    private final JavaMailSender emailSender;
-    @Value("${spring.mail.username}")
-    private String remetente;
-    private final Configuration configuration;
-
-    //TODO Apagar após terminar os consumers.
-    public void enviarEmailComTemplate(ContaClienteEntity cliente) throws MessagingException, IOException, TemplateException {
-        MimeMessage mimeMessage = emailSender.createMimeMessage();
-
-        String mensagem = "";
-        if (cliente.getTipoCliente() == TipoCliente.COMUM) {
-            mensagem = "Parabéns!<br />"+
-                    "Você já possui pontos fidelidade suficiente para trocar por duas semanas Premium.<br />" +
-                    "Pontos Fidelidade adquiridos: " + cliente.getPontosFidelidade();
-        } else if (cliente.getTipoCliente() == TipoCliente.PREMIUM) {
-            mensagem = "Parabéns!<br />" +
-                    "Você já possui pontos fidelidade suficiente para trocar por um mês de assinatura grátis.<br />" +
-                    "Pontos Fidelidade adquiridos: " + cliente.getPontosFidelidade();
-        }
-
-        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
-
-        helper.setFrom(remetente, "Biblioteca DBC");
-        helper.setTo(cliente.getEmail());
-        helper.setSubject("Premio Pontos Fidelidade Biblioteca");
-
-        Template template = configuration.getTemplate("templateBiblioteca.ftl");
-        Map<String, Object> dados = new HashMap<>();
-        dados.put("nome", cliente.getNome());
-        dados.put("mensagem",mensagem);
-        String html = FreeMarkerTemplateUtils.processTemplateIntoString(template, dados);
-
-        helper.setText(html, true);
-
-        emailSender.send(mimeMessage);
-    }
 
     public EmailDTO enviarEmailKafkaPontosFidelidade(ContaClienteEntity cliente) {
         EmailDTO emailDTO = new EmailDTO();
@@ -74,6 +38,18 @@ public class EmailService {
         }
         emailDTO.setDestinatario(cliente.getEmail());
         emailDTO.setAssunto("Parabéns! 1000 pontos!");
+        emailDTO.setTexto(mensagem);
+        return emailDTO;
+    }
+
+    public EmailDTO enviarEmailKafkaPromocional(ContaClienteEntity cliente) {
+        EmailDTO emailDTO = new EmailDTO();
+        String mensagem = "Não perca essa oportunidade "+cliente.getNome()+"!<br><br>"+
+                "Somente este mês você pode assinar o plano PREMIUM anual <br>" +
+                "com 50% de desconto! Não fique de fora dessa! <br>";
+
+        emailDTO.setDestinatario(cliente.getEmail());
+        emailDTO.setAssunto("Black November na Biblioteca DBC!");
         emailDTO.setTexto(mensagem);
         return emailDTO;
     }

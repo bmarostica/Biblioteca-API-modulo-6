@@ -80,7 +80,7 @@ public class ContaClienteService implements PlanosDeAssinatura {
         }
     }
 
-    @Scheduled(fixedDelay = 300000)
+//    @Scheduled(fixedDelay = 300000)
     public void produzirEmailKafka() {
         List<ContaClienteEntity> lista = contaClienteRepository.findPontosFidelidade();
         lista.forEach(contaClienteEntity -> {

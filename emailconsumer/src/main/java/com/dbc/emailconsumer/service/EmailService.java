@@ -31,7 +31,7 @@ public class EmailService {
 
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
 
-            helper.setFrom(remetente);
+            helper.setFrom(remetente, "Biblioteca DBC");
             helper.setTo(emailDTO.getDestinatario());
             helper.setSubject(emailDTO.getAssunto());
 

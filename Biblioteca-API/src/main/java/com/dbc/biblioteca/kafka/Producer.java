@@ -32,10 +32,11 @@ public class Producer {
     @Value(value = "${kafka.topic.relatorio}")
     private String topicoRelatorio;
 
-    private void send(String mensagem, String topico) {
+    private void send(String mensagem, String topico, Integer partition) {
         Message<String> message = MessageBuilder.withPayload(mensagem)
                 .setHeader(KafkaHeaders.TOPIC, topico)
                 .setHeader(KafkaHeaders.MESSAGE_KEY, UUID.randomUUID().toString())
+                .setHeader(KafkaHeaders.PARTITION_ID, partition)
                 .build();
 
         ListenableFuture<SendResult<String, String>> send = stringKafkaTemplate.send(message);
@@ -55,11 +56,27 @@ public class Producer {
 
     public void sendEmailKafka(EmailDTO emailDTO) throws JsonProcessingException {
         String payload = objectMapper.writeValueAsString(emailDTO);
-        send(payload, topicoEmail);
+        send(payload, topicoEmail, 0);
     }
 
-    public void sendRelatorioKafka(RelatorioDTO relatorioDTO) throws JsonProcessingException {
+    public void sendEmailPromocionalKafka(EmailDTO emailDTO) throws JsonProcessingException {
+        String payload = objectMapper.writeValueAsString(emailDTO);
+        send(payload, topicoEmail, 1);
+    }
+
+
+    public void sendRelatorioEmprestimoKafka(RelatorioDTO relatorioDTO) throws JsonProcessingException {
         String payload = objectMapper.writeValueAsString(relatorioDTO);
-        send(payload, topicoRelatorio);
+        send(payload, topicoRelatorio, 0);
+    }
+
+    public void sendRelatorioClienteKafka(RelatorioDTO relatorioDTO) throws JsonProcessingException {
+        String payload = objectMapper.writeValueAsString(relatorioDTO);
+        send(payload, topicoRelatorio, 1);
+    }
+
+    public void sendRelatorioLivroKafka(RelatorioDTO relatorioDTO) throws JsonProcessingException {
+        String payload = objectMapper.writeValueAsString(relatorioDTO);
+        send(payload, topicoRelatorio, 2);
     }
 }

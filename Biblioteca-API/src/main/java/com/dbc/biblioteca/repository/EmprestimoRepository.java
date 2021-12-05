@@ -3,6 +3,7 @@ package com.dbc.biblioteca.repository;
 import com.dbc.biblioteca.entity.ContaClienteEntity;
 import com.dbc.biblioteca.entity.EmprestimoEntity;
 import com.dbc.biblioteca.exceptions.RegraDeNegocioException;
+import org.bson.Document;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
