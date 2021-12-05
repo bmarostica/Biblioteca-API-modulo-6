@@ -22,7 +22,7 @@ public interface ContaClienteRepository extends JpaRepository<ContaClienteEntity
             "from cliente " +
             "where data_registro = :data"
             , nativeQuery = true)
-    List<Document> findByData(LocalDate data);
+    List<Document> findByDate(LocalDate data);
 
     @Query(value = "select * " +
             "from cliente" +
