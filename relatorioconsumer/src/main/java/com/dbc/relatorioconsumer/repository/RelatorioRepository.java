@@ -19,4 +19,5 @@ public interface RelatorioRepository extends MongoRepository<Relatorio, String> 
 
     @Query("{'data': ?0}")
     public List<Document> listarRelatorioPorDataEspecifica(LocalDate data);
+
 }
