@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,6 +23,7 @@ public class LivroService {
 
     public LivroDTO create(LivroCreateDTO livroCreateDTO) {
         LivroEntity livroEntity = objectMapper.convertValue(livroCreateDTO, LivroEntity.class);
+        livroEntity.setData_registro(LocalDate.now());
         LivroEntity livroCriado = livroRepository.save(livroEntity);
 
         LivroDTO livroDTO = objectMapper.convertValue(livroCriado, LivroDTO.class);

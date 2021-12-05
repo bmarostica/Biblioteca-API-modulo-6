@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Set;
 
 @Getter
@@ -41,6 +42,9 @@ public class LivroEntity {
     @Enumerated
     @Column(name = "STATUS_LIVRO")
     private StatusLivro statusLivro;
+
+    @Column(name = "DATA_REGISTRO")
+    private LocalDate data_registro;
 
     @JsonIgnore
     @OneToMany(mappedBy = "livroEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)

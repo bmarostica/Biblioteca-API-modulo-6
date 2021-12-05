@@ -9,11 +9,14 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class LivroDTO extends LivroCreateDTO {
     private Integer idLivro;
+    private LocalDate data_registro;
+
 
 }
