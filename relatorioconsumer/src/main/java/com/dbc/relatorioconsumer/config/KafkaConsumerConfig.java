@@ -17,6 +17,7 @@ import java.util.Map;
 public class KafkaConsumerConfig {
     private static final String EARLIEST = "earliest";
     private static final String LATEST = "latest";
+
     @Value(value = "${kafka.bootstrap-server}")
     private String bootstrapServer;
     @Value(value = "${kafka.client-id}")
