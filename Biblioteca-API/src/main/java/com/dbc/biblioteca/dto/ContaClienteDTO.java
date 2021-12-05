@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
@@ -22,4 +23,6 @@ public class ContaClienteDTO extends ContaClienteCreateDTO{
 
     @ApiModelProperty(value = "Quantidade de pontos fidelidade do cliente")
     private Integer pontosFidelidade;
+
+    private LocalDate data_registro;
 }

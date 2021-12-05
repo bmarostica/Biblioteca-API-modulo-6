@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Set;
 
 @Getter
@@ -35,6 +36,9 @@ public class ContaClienteEntity {
 
     @Column(name = "pontos_fidelidade")
     private Integer pontosFidelidade;
+
+    @Column(name = "DATA_REGISTRO")
+    private LocalDate data_registro;
 
     @JsonIgnore
     @OneToMany(mappedBy = "contaClienteEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)

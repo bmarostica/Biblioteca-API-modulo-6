@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
@@ -45,4 +46,6 @@ public class LivroCreateDTO {
     @NotNull
     @ApiModelProperty(value = "Status do livro -> Disponível ou indisponível")
     private StatusLivro statusLivro;
+
+
 }
