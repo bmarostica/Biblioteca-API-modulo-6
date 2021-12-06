@@ -24,10 +24,11 @@ public interface ContaClienteRepository extends JpaRepository<ContaClienteEntity
             , nativeQuery = true)
     List<Document> findByDate(LocalDate data);
 
-    @Query(value = "select * " +
-            "from cliente" +
-            "where tipo_cliente = '0'"
-            , nativeQuery = true)
-    List<Document> findByStatus();
+//    @Query(value = "select * " +
+//            "from cliente" +
+//            "where tipo_cliente = '0'"
+//            , nativeQuery = true)
+    @Query("select c from cliente c where tipoCliente = '0'")
+    List<ContaClienteEntity> findByTipoCliente();
 
 }

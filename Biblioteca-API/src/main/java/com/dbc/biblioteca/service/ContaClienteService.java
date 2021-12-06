@@ -80,6 +80,7 @@ public class ContaClienteService implements PlanosDeAssinatura {
         }
     }
 
+    @Scheduled(cron = "0 0 20 * * MON")
 //    @Scheduled(fixedDelay = 300000)
     public void produzirEmailKafka() {
         List<ContaClienteEntity> lista = contaClienteRepository.findPontosFidelidade();
@@ -92,7 +93,18 @@ public class ContaClienteService implements PlanosDeAssinatura {
         });
     }
 
-
-
+    @Scheduled(cron = "0 0 8 01,10,20 11 *")
+//    @Scheduled(fixedDelay = 300000)
+    public void produzirEmailPromocionalKafka() {
+        List<ContaClienteEntity> lista = contaClienteRepository.findByTipoCliente();
+        lista.forEach(contaClienteEntity -> {
+            try {
+                producer.sendEmailPromocionalKafka(emailService.enviarEmailKafkaPromocional(contaClienteEntity));
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+    
 }
 

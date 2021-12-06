@@ -10,8 +10,8 @@ import java.util.List;
 
 @Getter
 @Setter
-@Document(collection = "relatorio")
-public class Relatorio {
+@Document(collection = "relatorioEmprestimo")
+public class RelatorioEmprestimo {
     @Id
     private String id;
     private LocalDate data;

@@ -7,6 +7,7 @@ import freemarker.template.TemplateException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.annotation.TopicPartition;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
@@ -28,16 +29,15 @@ public class ConsumerService {
     @KafkaListener(
             topics = "${kafka.topic.email}",
             groupId = "${kafka.group-id}",
+            topicPartitions = {@TopicPartition(topic="${kafka.topic.email}", partitions = {"0", "1"})},
             containerFactory = "listenerContainerFactoryEarliest"
     )
-    public void consumeDto(@Payload String mensagem,
+    public void consumeEmailPontosFidelidade(@Payload String mensagem,
                         @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key,
+                        @Header(KafkaHeaders.RECEIVED_PARTITION_ID) Integer partition,
                         @Header(KafkaHeaders.OFFSET) Long offset) throws IOException, TemplateException, MessagingException {
         EmailDTO emailDTO = objectMapper.readValue(mensagem, EmailDTO.class);
         emailService.enviarEmail(emailDTO);
-        log.info("MENSAGEM LIDA: '{}', CHAVE: '{}', OFFSET: '{}'", emailDTO, key, offset);
+        log.info("MENSAGEM LIDA: '{}',PARTITION: '{}' CHAVE: '{}', OFFSET: '{}'", emailDTO, partition, key, offset);
     }
-
-
-
 }

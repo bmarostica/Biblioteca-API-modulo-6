@@ -1,12 +1,13 @@
 package com.dbc.relatorioconsumer.service;
 
 import com.dbc.relatorioconsumer.dto.RelatorioDTO;
-import com.dbc.relatorioconsumer.model.Relatorio;
+import com.dbc.relatorioconsumer.model.RelatorioCliente;
+import com.dbc.relatorioconsumer.model.RelatorioEmprestimo;
+import com.dbc.relatorioconsumer.model.RelatorioLivro;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.annotation.TopicPartition;
 import org.springframework.kafka.support.KafkaHeaders;
@@ -18,78 +19,46 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @RequiredArgsConstructor
 public class ConsumerService {
-    private final RelatorioService relatorioService;
+    private final RelatorioEmprestimoService relatorioEmprestimoService;
+    private final RelatorioClienteService relatorioClienteService;
+    private final RelatorioLivroService relatorioLivroService;
     private final ObjectMapper objectMapper;
 
 
     @KafkaListener(
             topics = "${kafka.topic.relatorio}",
             groupId = "${kafka.group-id}",
-            topicPartitions = {@TopicPartition(topic = "${kafka.topic.relatorio}", partitions = {"0"})},
-            clientIdPrefix = "relatorioEmprestimo",
+            topicPartitions = {@TopicPartition(topic = "${kafka.topic.relatorio}", partitions = {"0", "1", "2"})},
             containerFactory = "listenerContainerFactoryEarliest"
     )
-    public void consumeRelatorioEmprestimo(@Payload String mensagem,
+    public void consumeRelatorio(@Payload String mensagem,
                         @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key,
-                        @Header(KafkaHeaders.OFFSET) Long offset,
-                        @Header(KafkaHeaders.PARTITION_ID) Integer partition)
+                        @Header(KafkaHeaders.RECEIVED_PARTITION_ID) Integer partition,
+                        @Header(KafkaHeaders.OFFSET) Long offset)
             throws JsonProcessingException {
 
         RelatorioDTO relatorioDTO = objectMapper.readValue(mensagem, RelatorioDTO.class);
 
-        Relatorio relatorio = new Relatorio();
-        relatorio.setClasse(relatorioDTO.getClasse());
-        relatorio.setData(relatorioDTO.getData());
-        relatorio.setConteudo(relatorioDTO.getConteudo());
-        relatorioService.create(relatorio);
+        if(partition == 0) {
+            RelatorioEmprestimo relatorioEmprestimo = new RelatorioEmprestimo();
+            relatorioEmprestimo.setClasse(relatorioDTO.getClasse());
+            relatorioEmprestimo.setData(relatorioDTO.getData());
+            relatorioEmprestimo.setConteudo(relatorioDTO.getConteudo());
+            relatorioEmprestimoService.create(relatorioEmprestimo);
+        }else if(partition == 1) {
+            RelatorioCliente relatorioCliente = new RelatorioCliente();
+            relatorioCliente.setClasse(relatorioDTO.getClasse());
+            relatorioCliente.setData(relatorioDTO.getData());
+            relatorioCliente.setConteudo(relatorioDTO.getConteudo());
+            relatorioClienteService.create(relatorioCliente);
+        }else if(partition == 2) {
+            RelatorioLivro relatorioLivro = new RelatorioLivro();
+            relatorioLivro.setClasse(relatorioDTO.getClasse());
+            relatorioLivro.setData(relatorioDTO.getData());
+            relatorioLivro.setConteudo(relatorioDTO.getConteudo());
+            relatorioLivroService.create(relatorioLivro);
+        }
 
-        log.info("MENSAGEM LIDA: '{}', CHAVE: '{}', OFFSET: '{}', PARTITION: '{}'", relatorioDTO, key, offset,partition);
-    }
-
-    @KafkaListener(
-            topics = "${kafka.topic.relatorio}",
-            groupId = "${kafka.group-id}",
-            topicPartitions = {@TopicPartition(topic = "${kafka.topic.relatorio}", partitions = {"1"})},
-            clientIdPrefix = "relatorioCliente",
-            containerFactory = "listenerContainerFactoryEarliest"
-    )
-    public void consumeRelatorioCliente(@Payload String mensagem,
-                                           @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key,
-                                           @Header(KafkaHeaders.OFFSET) Long offset,
-                                           @Header(KafkaHeaders.PARTITION_ID) Integer partition)
-            throws JsonProcessingException {
-
-        RelatorioDTO relatorioDTO = objectMapper.readValue(mensagem, RelatorioDTO.class);
-
-        Relatorio relatorio = new Relatorio();
-        relatorio.setClasse(relatorioDTO.getClasse());
-        relatorio.setData(relatorioDTO.getData());
-        relatorio.setConteudo(relatorioDTO.getConteudo());
-        relatorioService.create(relatorio);
-
-        log.info("MENSAGEM LIDA: '{}', CHAVE: '{}', OFFSET: '{}', PARTITION: '{}'", relatorioDTO, key, offset,partition);
-    }
-
-    @KafkaListener(
-            topics = "${kafka.topic.relatorio}",
-            groupId = "${kafka.group-id}",
-            topicPartitions = {@TopicPartition(topic = "${kafka.topic.relatorio}", partitions = {"2"})},
-            clientIdPrefix = "relatorioLivro",
-            containerFactory = "listenerContainerFactoryEarliest"
-    )
-    public void consumeRelatorioLivro(@Payload String mensagem,
-                                        @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key,
-                                        @Header(KafkaHeaders.OFFSET) Long offset,
-                                        @Header(KafkaHeaders.PARTITION_ID) Integer partition)
-            throws JsonProcessingException {
-
-        RelatorioDTO relatorioDTO = objectMapper.readValue(mensagem, RelatorioDTO.class);
-
-        Relatorio relatorio = new Relatorio();
-        relatorio.setClasse(relatorioDTO.getClasse());
-        relatorio.setData(relatorioDTO.getData());
-        relatorio.setConteudo(relatorioDTO.getConteudo());
-        relatorioService.create(relatorio);
 
         log.info("MENSAGEM LIDA: '{}', CHAVE: '{}', OFFSET: '{}', PARTITION: '{}'", relatorioDTO, key, offset,partition);
     }
