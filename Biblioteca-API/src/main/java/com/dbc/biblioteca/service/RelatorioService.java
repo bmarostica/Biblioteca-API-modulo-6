@@ -26,21 +26,21 @@ public class RelatorioService {
     private final Producer producer;
     private final ObjectMapper objectMapper;
 
-    @Scheduled(cron = "0 0 20 * * MON-FRI")
-//    @Scheduled(fixedDelay = 300000)
+//    @Scheduled(cron = "0 0 20 * * MON-FRI")
+    @Scheduled(fixedDelay = 1300000)
     public void gerarRelatorioEmprestimoKafka() throws JsonProcessingException {
 
         producer.sendRelatorioEmprestimoKafka(criarRelatorioEmprestimo());
 
     }
-    @Scheduled(cron = "0 10 20 * * MON-FRI")
-//    @Scheduled(fixedDelay = 300000)
+//    @Scheduled(cron = "0 10 20 * * MON-FRI")
+    @Scheduled(fixedDelay = 1300000)
     public void gerarRelatorioLivroKafka() throws JsonProcessingException {
         producer.sendRelatorioLivroKafka(criarRelatorioLivro());
     }
 
-    @Scheduled(cron = "0 05 20 * * MON-FRI")
-//    @Scheduled(fixedDelay = 300000)
+//    @Scheduled(cron = "0 05 20 * * MON-FRI")
+    @Scheduled(fixedDelay = 1300000)
     public void gerarRelatorioClienteKafka() throws JsonProcessingException {
         producer.sendRelatorioClienteKafka(criarRelatorioCliente());
     }

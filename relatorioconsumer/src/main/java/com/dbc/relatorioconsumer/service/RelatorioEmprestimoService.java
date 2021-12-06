@@ -17,10 +17,8 @@ public class RelatorioEmprestimoService {
     private final RelatorioEmprestimoRepository relatorioEmprestimoRepository;
     private final ObjectMapper objectMapper;
 
-    public Document create(RelatorioEmprestimo relatorioEmprestimo) {
-        RelatorioEmprestimo relatorioEmprestimoCriado = relatorioEmprestimoRepository.save(relatorioEmprestimo);
-        Document relatorioDocument = objectMapper.convertValue(relatorioEmprestimoCriado, Document.class);
-        return relatorioDocument;
+    public void create(RelatorioEmprestimo relatorioEmprestimo) {
+        relatorioEmprestimoRepository.save(relatorioEmprestimo);
     }
 
     public  List<Document> list() {
