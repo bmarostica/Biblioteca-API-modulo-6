@@ -38,30 +38,30 @@ public class LivroServiceTest {
         doReturn(Optional.of(livro)).when(livroRepository).findById(5);
         //when(livroRepository.findById(anyInt())).thenReturn(Optional.of(livro));
 
+
+        //assert
         livroService.delete(5);
         verify(livroRepository, Mockito.times(1)).delete(livro);
 
-        //assert
     }
 
     @Test
     public void createLivro() throws RegraDeNegocioException {
-        LivroEntity livro = new LivroEntity();
+        LivroEntity livroEntity = new LivroEntity();
+        livroEntity.setData_registro(LocalDate.now());
         LivroDTO livroDTO = new LivroDTO();
         LivroCreateDTO livroCreateDTO = new LivroCreateDTO();
 
 
+
+        when(objectMapper.convertValue(livroCreateDTO, LivroEntity.class)).thenReturn(livroEntity);
+//        doReturn(livroEntity).when(livroRepository).save(livroEntity);
+        when(livroRepository.save(livroEntity)).thenReturn(livroEntity);
+        when(objectMapper.convertValue(livroEntity, LivroDTO.class)).thenReturn(livroDTO);
         livroService.create(livroCreateDTO);
-        when(objectMapper.convertValue(livroCreateDTO, LivroEntity.class)).thenReturn(livro);
-        when(livro.setData_registro()).then(livro.setData_registro(LocalDate.now()));
-
-        doReturn(Optional.of(livro)).when(livroRepository).save(livro);
-        //when(livroRepository.save(livro).thenReturn(Optional.of(livro));
-
-        when(objectMapper.convertValue(livro, LivroDTO.class)).thenReturn(livroDTO);
 
 
-        verify(livroRepository, Mockito.times(1)).save(livro);
+        verify(livroRepository, Mockito.times(1)).save(livroEntity);
     }
 
 
